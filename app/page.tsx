@@ -3,18 +3,33 @@ const Home = async () => {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      query: `query getUser {
-      user(id: "user1") {
-        id
-        name
-        books {
-          id
-          name
-          msrp
-          price
+      query: /* GraphQL */ `
+        query getUser {
+          user(id: "user1") {
+            id
+            name
+            books {
+              edges {
+                cursor
+                hasIncentive
+                node {
+                  id
+                  name
+                  msrp
+                  price
+                }
+              }
+              pageInfo {
+                hasNextPage
+                hasPreviousPage
+                startCursor
+                endCursor
+              }
+              totalCount
+            }
+          }
         }
-      }
-    }`,
+      `,
     }),
   });
   if (!response.ok) {

@@ -19,6 +19,12 @@ const database: User[] = [
 ];
 
 const typeDefs = parse(/* GraphQL */ `
+  extend schema
+    @link(
+      url: "https://specs.apollo.dev/federation/v2.3"
+      import: ["@key", "@shareable", "@requires", "@external", "@inaccessible"]
+    )
+
   type Query {
     user(id: String!): User
   }

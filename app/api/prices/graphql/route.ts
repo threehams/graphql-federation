@@ -3,6 +3,12 @@ import { buildSubgraphSchema } from "@apollo/subgraph";
 import { createYoga } from "graphql-yoga";
 
 const typeDefs = parse(/* GraphQL */ `
+  extend schema
+    @link(
+      url: "https://specs.apollo.dev/federation/v2.3"
+      import: ["@key", "@shareable", "@requires", "@external", "@inaccessible"]
+    )
+
   type Query {
     noop: String
   }
@@ -11,6 +17,10 @@ const typeDefs = parse(/* GraphQL */ `
     id: ID!
     msrp: Float! @external
     price: Float! @requires(fields: "msrp")
+  }
+  type BookEdge @key(fields: "node { id }") {
+    node: Book!
+    hasIncentive: Boolean! @requires(fields: "node { msrp }")
   }
 `);
 
@@ -28,6 +38,14 @@ const schema = buildSubgraphSchema({
       },
       price: (parent) => {
         return parent.msrp * 0.9;
+      },
+    },
+    BookEdge: {
+      __resolveReference(entity) {
+        return entity;
+      },
+      hasIncentive: (parent) => {
+        return parent.node.msrp > 11;
       },
     },
   },
