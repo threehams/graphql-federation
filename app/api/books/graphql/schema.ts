@@ -41,7 +41,7 @@ const typeDefs = parse(/* GraphQL */ `
   """
   type Book @key(fields: "id") {
     id: ID!
-    msrp: Float!
+    msrp: Float! @inaccessible
     name: String!
   }
 `);
