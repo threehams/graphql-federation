@@ -29,30 +29,25 @@ const typeDefs = parse(/* GraphQL */ `
   }
 `);
 
-const resolvers = {
-  Query: {
-    user(root, { id }) {
-      return database.find((user) => user.id === id);
+const schema = buildSubgraphSchema({
+  typeDefs,
+  resolvers: {
+    Query: {
+      user(root, { id }) {
+        return database.find((user) => user.id === id);
+      },
+    },
+    User: {
+      __resolveReference(entity) {
+        return database.find((user) => user.id === entity.id);
+      },
     },
   },
-  User: {
-    __resolveReference(entity) {
-      return database.find((user) => user.id === entity.id);
-    },
-  },
-};
+});
 
-const schema = buildSubgraphSchema([{ typeDefs, resolvers }]);
-
-interface NextContext {
-  params: Promise<Record<string, string>>;
-}
-
-const { handleRequest } = createYoga<NextContext>({
+const { handleRequest } = createYoga({
   schema,
   graphqlEndpoint: "/api/users/graphql",
-
-  // Yoga needs to know how to create a valid Next response
   fetchAPI: { Response },
 });
 
