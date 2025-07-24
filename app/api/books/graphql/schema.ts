@@ -12,6 +12,18 @@ const typeDefs = parse(/* GraphQL */ `
 
   type Query {
     book(id: String!): Book
+    bookSearch(filters: BookSearchFilters): BookConnection!
+  }
+
+  input BookSearchFilters {
+    name: String
+    msrp: RangeInput
+    hasIncentive: Boolean
+  }
+
+  input RangeInput {
+    min: Float
+    max: Float
   }
 
   type User @key(fields: "id") {
@@ -50,11 +62,35 @@ export const schema = buildSubgraphSchema({
   typeDefs,
   resolvers: {
     Query: {
-      book: () => {},
+      book: (parent, { id }) => booksDatabase.find((book) => book.id === id),
+      bookSearch: (parent, { filters }) => {
+        let books = booksDatabase;
+        if (filters.name) {
+          books = books.filter(({ name }) =>
+            name.toLowerCase().includes(filters.name.toLowerCase())
+          );
+        }
+        const bookEdges = books.map((book) => {
+          return {
+            cursor: book.id,
+            node: book,
+          };
+        });
+        return {
+          edges: bookEdges,
+          pageInfo: {
+            hasNextPage: false,
+            hasPreviousPage: false,
+            startCursor: bookEdges[0]?.cursor,
+            endCursor: bookEdges.at(-1)?.cursor,
+          },
+          totalCount: books.length,
+        };
+      },
     },
     Book: {
       __resolveReference({ id }) {
-        return booksDatabase.find((bookId) => bookId === id);
+        return booksDatabase.find((bookId) => bookId.id === id);
       },
     },
     User: {

@@ -5,6 +5,27 @@ const Home = async () => {
     body: JSON.stringify({
       query: /* GraphQL */ `
         query getUser {
+          book(id: "book1") {
+            id
+            name
+            price
+          }
+          bookSearch(filters: { name: "sequel" }) {
+            totalCount
+            edges {
+              cursor
+              hasIncentive
+              node {
+                id
+                name
+                price
+              }
+            }
+          }
+          bookRecommendations {
+            id
+            name
+          }
           user(id: "user1") {
             id
             name
@@ -25,6 +46,11 @@ const Home = async () => {
                 endCursor
               }
               totalCount
+            }
+            bookRecommendations {
+              id
+              name
+              price
             }
           }
         }

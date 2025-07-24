@@ -10,7 +10,7 @@
     "start": "next start",
     "lint": "next lint",
     "gateway": "hive-gateway supergraph",
-    "compose": "mesh-compose -o supergraph.graphql"
+    "compose": "wgc router compose -i compose.yaml -o router.json"
   },
   "dependencies": {
     "@apollo/subgraph": "^2.11.2",
@@ -24,7 +24,8 @@
     "graphql-yoga": "^5.13.5",
     "next": "15.3.4",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "wgc": "^0.87.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

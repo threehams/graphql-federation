@@ -5,16 +5,19 @@ import { createYoga } from "graphql-yoga";
 type User = {
   id: string;
   name: string;
+  age: number;
 };
 
 const database: User[] = [
   {
     id: "user1",
     name: "Blacklock",
+    age: 31,
   },
   {
     id: "user2",
     name: "Johnson",
+    age: 22,
   },
 ];
 
@@ -31,7 +34,8 @@ const typeDefs = parse(/* GraphQL */ `
 
   type User @key(fields: "id") {
     id: ID!
-    name: String
+    name: String!
+    age: Int!
   }
 `);
 

@@ -20,5 +20,10 @@ export const composeConfig = defineConfig({
         endpoint: "http://localhost:3000/api/prices/graphql",
       }),
     },
+    {
+      sourceHandler: loadGraphQLHTTPSubgraph("recommendations", {
+        endpoint: "http://localhost:3000/api/recommendations/graphql",
+      }),
+    },
   ],
 });

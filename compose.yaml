@@ -1,0 +1,18 @@
+version: 1
+subgraphs:
+  - name: books
+    routing_url: http://localhost:3000/api/books/graphql
+    introspection:
+      url: http://localhost:3000/api/books/graphql
+  - name: users
+    routing_url: http://localhost:3000/api/users/graphql
+    introspection:
+      url: http://localhost:3000/api/users/graphql
+  - name: prices
+    routing_url: http://localhost:3000/api/prices/graphql
+    introspection:
+      url: http://localhost:3000/api/prices/graphql
+  - name: recommendations
+    routing_url: http://localhost:3000/api/recommendations/graphql
+    introspection:
+      url: http://localhost:3000/api/recommendations/graphql
